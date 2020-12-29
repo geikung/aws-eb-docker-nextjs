@@ -1,14 +1,20 @@
-FROM ubuntu:12.04
+# base image
+FROM node:alpine
 
-RUN apt-get update
-RUN apt-get install -y nginx zip curl
+# create & set working directory
+RUN mkdir -p /usr/src
+WORKDIR /usr/src
 
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-# RUN curl -o /usr/share/nginx/www/master.zip -L https://codeload.github.com/gabrielecirulli/2048/zip/master
-# RUN cd /usr/share/nginx/www/ && unzip master.zip && mv 2048-master/* . && rm -rf 2048-master master.zip
+# copy source files
+COPY . /usr/src
 
-COPY www /usr/share/nginx/www
+# install pnpm
+RUN npm install -g pnpm
 
+# install dependencies
+RUN pnpm install
+
+# start app
+RUN pnpm run build
 EXPOSE 80
-
-CMD ["/usr/sbin/nginx", "-c", "/etc/nginx/nginx.conf"]
+CMD pnpm run start

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3100",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 80",
     "lint-watch": "esw pages --ext .js,.jsx --watch --color",
     "lint": "eslint pages",
     "lint:fix": "eslint pages --fix"
