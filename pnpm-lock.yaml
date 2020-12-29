@@ -7,6 +7,7 @@ dependencies:
   '@zeit/next-sass': 1.0.1
   ahooks: 2.9.2_react@17.0.1
   antd: 4.9.4_react-dom@17.0.1+react@17.0.1
+  axios: 0.21.1
   babel-eslint: 10.1.0_eslint@7.16.0
   babel-plugin-import: 1.13.3
   babel-plugin-styled-components: 1.12.0_styled-components@5.2.1
@@ -985,6 +986,12 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-5Kgy8Cz6LPC9DJcNb3yjAXTu3XihQgEdnIg50c//zOC/MyLP0Clg+Y8Sh9ZjjnvBrDZU4DgXS9C3T9r4/scGZQ==
+  /axios/0.21.1:
+    dependencies:
+      follow-redirects: 1.13.1
+    dev: false
+    resolution:
+      integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   /axobject-query/2.2.0:
     dev: false
     resolution:
@@ -2769,6 +2776,17 @@ packages:
     dev: false
     resolution:
       integrity: sha512-3Z4XhFZ3992uIq0XOqb9AreonueSYphE6oYbpt5+3u06JWklbsPkNv3ZKkP9Bz/r+1MWCaMoSQ28P85+1Yc77w==
+  /follow-redirects/1.13.1:
+    dev: false
+    engines:
+      node: '>=4.0'
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    resolution:
+      integrity: sha512-SSG5xmZh1mkPGyKzjZP8zLjltIfpW32Y5QpdNJyjcfGxK3qo3NDDkZOZSFiGn1A6SclQxY9GzEwAHQ3dmYRWpg==
   /for-in/0.1.8:
     dev: false
     engines:
@@ -7017,6 +7035,7 @@ specifiers:
   '@zeit/next-sass': ^1.0.1
   ahooks: ^2.9.2
   antd: ^4.9.4
+  axios: ^0.21.1
   babel-eslint: ^10.1.0
   babel-plugin-import: ^1.13.3
   babel-plugin-styled-components: ^1.12.0
