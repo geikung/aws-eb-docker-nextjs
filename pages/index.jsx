@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useMount } from 'ahooks';
 import { Button } from 'antd';
 import { useAppContext } from '../context/app.state';
+import client from '../shared/axios';
 
 const HomeStyled = styled.div`
 
@@ -12,6 +13,7 @@ const HomeStyled = styled.div`
 const Home = (props) => {
   const [mounted, setMounted] = useState(false);
   const [count, setCount] = useState(0);
+  const [data, setData] = useState(null);
 
   const appContext = useAppContext();
   const { state, dispatch } = appContext;
@@ -25,8 +27,14 @@ const Home = (props) => {
   // console.log('isAuthenticated:', isAuthenticated);
   // console.log('setIsAuthenticated:', setIsAuthenticated);
 
+  const loadData = async () => {
+    const response = await client.get('/hello');
+    setData(response.data);
+  };
+
   useMount(() => {
     setMounted(true);
+    loadData();
   });
 
   const handleLogin = () => {
@@ -50,7 +58,7 @@ const Home = (props) => {
 
   return (
     <HomeStyled>
-      <label className="my-text">HomeAAABBB</label>
+      <label className="my-text">{data ? data.message : 'Loading...'}</label>
 
       <div>
         <Button onClick={handleLogin}>Login</Button>
