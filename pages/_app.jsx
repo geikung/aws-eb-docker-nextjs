@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from 'styled-components';
 import App from 'next/app';
 import { AppProvider } from '../context/app.state';
-import Page from './@components/page';
+import Page from '../components/page';
 import '../assets/styles.less';
 
 const theme = {

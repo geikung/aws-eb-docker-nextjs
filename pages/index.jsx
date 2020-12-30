@@ -19,13 +19,13 @@ const Home = (props) => {
   const { state, dispatch } = appContext;
   const { user } = state;
 
+  const {
+    stars,
+    API_URL,
+    NODE_ENV,
+    STAGE_ENV,
+  } = props;
   const { isAuthenticated } = user;
-
-  console.log('isAuthenticated:', isAuthenticated);
-  // const { isAuthenticated } = useValues(authLogic);
-  // const { setIsAuthenticated } = useActions(authLogic);
-  // console.log('isAuthenticated:', isAuthenticated);
-  // console.log('setIsAuthenticated:', setIsAuthenticated);
 
   const loadData = async () => {
     const response = await client.get('/hello');
@@ -58,7 +58,21 @@ const Home = (props) => {
 
   return (
     <HomeStyled>
-      <label className="my-text">{data ? data.message : 'Loading...'}</label>
+      <div className="my-text">
+        Client: {data ? data.message : 'Loading...'}
+      </div>
+      <div className="my-text">
+        Server: stars => {stars}
+      </div>
+      <div className="my-text">
+        API_URL: {API_URL}
+      </div>
+      <div className="my-text">
+        NODE_ENV: {NODE_ENV}
+      </div>
+      <div className="my-text">
+        STAGE_ENV: {STAGE_ENV}
+      </div>
 
       <div>
         <Button onClick={handleLogin}>Login</Button>
@@ -70,5 +84,29 @@ const Home = (props) => {
   );
 };
 
+Home.getInitialProps = async (ctx) => {
+  // server
+  const res = await fetch('https://api.github.com/repos/vercel/next.js');
+  const json = await res.json();
+  return {
+    stars: json.stargazers_count,
+    API_URL: process.env.API_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    STAGE_ENV: process.env.STAGE_ENV,
+  };
+};
+
+Home.defaultProps = {
+  stars: null,
+  API_URL: null,
+  NODE_ENV: null,
+  STAGE_ENV: null,
+};
+Home.propTypes = {
+  stars: PropTypes.number,
+  API_URL: PropTypes.string,
+  NODE_ENV: PropTypes.string,
+  STAGE_ENV: PropTypes.string,
+};
+
 export default Home;
-// export default keaConnect(Home);

@@ -2,6 +2,7 @@ import {
   createContext, useContext, useReducer, useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
+import { isServer } from '../shared/helpers';
 
 const initialState = {
   user: {
@@ -56,8 +57,6 @@ const reducer = (state, action) => {
 const persistKey = 'app-state';
 
 export const AppProvider = ({ children }) => {
-  const isServer = !process.browser;
-
   const [state, dispatch] = useReducer(
     reducer,
     isServer
