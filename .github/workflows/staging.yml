@@ -5,10 +5,10 @@ name: CI
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ staging ]
   pull_request:
-    branches: [ main ]
+    branches: [ staging ]
     types: [closed]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -30,7 +30,7 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "pnpm run start"
-          replace: "pnpm run start:production"
+          replace: "pnpm run start:staging"
           include: "Dockerfile"
 
       - name: Print Dockerfile
