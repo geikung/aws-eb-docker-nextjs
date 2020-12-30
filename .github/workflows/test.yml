@@ -54,7 +54,7 @@ jobs:
 
   # This workflow contains a single job called "build"
   deploy:
-    needs: [eslint, jest]
+    needs: [eslint, unit_test]
 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
