@@ -26,9 +26,11 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Replace stage env string in Dockerfile
-        run: sed -i 's/pnpm run start/pnpm run start:$STAGE_ENV/' Dockerfile
-        env:
-          STAGE_ENV: production
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "pnpm run start"
+          replace: "pnpm run start:production"
+          include: "Dockerfile"
 
       - name: Print
         run: cat Dockerfile
