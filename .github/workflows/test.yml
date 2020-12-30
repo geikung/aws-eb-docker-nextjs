@@ -16,6 +16,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Eslint Action
+        uses: snow-actions/line-notify@v1.0.0
+        with:
+          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+          message: [HelloWorld - test] start deploy...
+
   eslint:
     runs-on: ubuntu-latest
     steps:
@@ -24,6 +33,20 @@ jobs:
 
       - name: Eslint Action
         uses: stefanoeb/eslint-action@1.0.2
+
+      - name: The job has succeeded
+        if: ${{ success() }}
+        uses: snow-actions/line-notify@v1.0.0
+        with:
+          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+          message: [HelloWorld - test] eslint success
+
+      - name: The job has failed
+        if: ${{ failure() }}
+        uses: snow-actions/line-notify@v1.0.0
+        with:
+          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+          message: [HelloWorld - test] eslint fail
 
   # This workflow contains a single job called "build"
   deploy:
