@@ -7,7 +7,7 @@ import {
 import { ShoppingCartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { useMount } from 'ahooks';
-import { useAppContext } from '../../context/app.state';
+import { useAppContext } from '../context/app.state';
 
 const {
   Header, Footer, Content,

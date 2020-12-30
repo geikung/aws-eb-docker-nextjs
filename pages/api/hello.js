@@ -1,34 +1,34 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import Cors from 'cors';
+import { check } from 'express-validator';
+import appMiddleware from '../../middlewares/app';
+import authMiddleware from '../../middlewares/auth';
+import validateMiddleware from '../../middlewares/validate';
 
-// Initializing the cors middleware
-const cors = Cors({
-  methods: ['GET'],
-});
+const executes = {
+  GET: async (req, res) => {
+    res.json({ message: 'GET Hello Everyone!' });
+  },
+  POST: async (req, res) => {
+    await authMiddleware()(req, res);
+    await validateMiddleware([
+      check('myVar1')
+        .isBoolean()
+        .withMessage('myVar1 is required'),
+      check('myVar2').isBoolean().optional(),
+    ])(req, res);
 
-// Helper method to wait for a middleware to execute before continuing
-// And to throw an error when an error happens in a middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      if (!req.headers['x-api-key'] || req.headers['x-api-key'] !== 'my_key') {
-        return reject(result);
-      }
+    const { body } = req;
 
-      return resolve(result);
-    });
-  });
-}
+    res.json({ message: 'POST Hello Everyone!' });
+  },
+};
 
 async function handler(req, res) {
-  // Run the middleware
-  await runMiddleware(req, res, cors);
-
-  // Rest of the API logic
-  res.json({ message: 'Hello Everyone!' });
+  await appMiddleware({
+    allowMethod: ['*'],
+    executes,
+  })(req, res);
+  return executes[req.method](req, res);
 }
 
 export default handler;

@@ -19,13 +19,8 @@ const Home = (props) => {
   const { state, dispatch } = appContext;
   const { user } = state;
 
+  const { stars } = props;
   const { isAuthenticated } = user;
-
-  console.log('isAuthenticated:', isAuthenticated);
-  // const { isAuthenticated } = useValues(authLogic);
-  // const { setIsAuthenticated } = useActions(authLogic);
-  // console.log('isAuthenticated:', isAuthenticated);
-  // console.log('setIsAuthenticated:', setIsAuthenticated);
 
   const loadData = async () => {
     const response = await client.get('/hello');
@@ -58,7 +53,12 @@ const Home = (props) => {
 
   return (
     <HomeStyled>
-      <label className="my-text">{data ? data.message : 'Loading...'}</label>
+      <div className="my-text">
+        Client: {data ? data.message : 'Loading...'}
+      </div>
+      <div className="my-text">
+        Server: stars => {stars}
+      </div>
 
       <div>
         <Button onClick={handleLogin}>Login</Button>
@@ -70,5 +70,18 @@ const Home = (props) => {
   );
 };
 
+Home.getInitialProps = async (ctx) => {
+  // server
+  const res = await fetch('https://api.github.com/repos/vercel/next.js');
+  const json = await res.json();
+  return { stars: json.stargazers_count };
+};
+
+Home.defaultProps = {
+  stars: null,
+};
+Home.propTypes = {
+  stars: PropTypes.number,
+};
+
 export default Home;
-// export default keaConnect(Home);
