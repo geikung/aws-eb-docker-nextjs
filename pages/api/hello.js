@@ -17,7 +17,7 @@ const executes = {
       check('myVar2').isBoolean().optional(),
     ])(req, res);
 
-    const { body } = req;
+    // const { body } = req;
 
     res.json({ message: 'POST Hello Everyone!' });
   },
@@ -29,6 +29,6 @@ async function handler(req, res) {
     executes,
   })(req, res);
   return executes[req.method](req, res);
-};
+}
 
 export default handler;
