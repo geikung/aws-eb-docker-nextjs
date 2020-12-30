@@ -35,10 +35,6 @@ jobs:
       - name: Eslint action
         uses: stefanoeb/eslint-action@1.0.2
 
-      - name: The job has succeeded
-        if: ${{ success() }}
-        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] eslint success'"
-
       - name: The job has failed
         if: ${{ failure() }}
         run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] eslint fail'"
@@ -51,6 +47,10 @@ jobs:
 
       - name: Run Jest
         uses: stefanoeb/jest-action@1.0.3
+
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] jest fail'"
 
   # This workflow contains a single job called "build"
   deploy:
