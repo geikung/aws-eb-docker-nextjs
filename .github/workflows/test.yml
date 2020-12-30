@@ -4,6 +4,8 @@ name: CI
 
 env:
   stage: 'test'
+  notify_url: 'https://notify-api.line.me/api/notify'
+  notify_msg_prefix: "[${{ github.repository }}][${{ env.stage }}]"
 
 # Controls when the action will run.
 on:
@@ -23,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Nofify action
-        run: "curl -X POST https://notify-api.line.me/api/notify -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}][${{ github.event_name }}] start deploy...&stickerPackageId=3&stickerId=233'"
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='${{ env.notify_msg_prefix }} start deploy...&stickerPackageId=3&stickerId=233'"
 
   # eslint:
   #   runs-on: ubuntu-latest
