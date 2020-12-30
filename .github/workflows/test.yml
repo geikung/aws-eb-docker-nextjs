@@ -44,16 +44,19 @@ jobs:
       - name: Print Dockerfile
         run: cat Dockerfile
 
-      - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+      - name: Test
+        run: echo ${{ steps.random-env.outputs.RANDOM_STR }}
 
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v14
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: HelloWorld
-          environment_name: Helloworld-test
-          version_label: "helloworld-${{ github.run_id }}-${{ steps.random-env.outputs.RANDOM_STR }}"
-          region: us-east-2
-          deployment_package: deploy.zip
+      # - name: Generate deployment package
+      #   run: zip -r deploy.zip . -x '*.git*'
+
+      # - name: Deploy to EB
+      #   uses: einaregilsson/beanstalk-deploy@v14
+      #   with:
+      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     application_name: HelloWorld
+      #     environment_name: Helloworld-test
+      #     version_label: "helloworld-${{ github.run_id }}-${{ steps.random-env.outputs.RANDOM_STR }}"
+      #     region: us-east-2
+      #     deployment_package: deploy.zip
