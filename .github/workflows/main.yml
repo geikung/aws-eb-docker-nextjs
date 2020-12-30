@@ -22,12 +22,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Environment variables
-        env:
-          STAGE_ENV: production
-
       - name: Checkout source code
         uses: actions/checkout@v1
+
+      - name: Environment variables
+        run: echo set env variables
+        env:
+          STAGE_ENV: production
 
       - name: Replace stage env string in Dockerfile
         run: sed -i 's/pnpm run start/pnpm run start:$STAGE_ENV/' Dockerfile
