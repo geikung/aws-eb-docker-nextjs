@@ -6,9 +6,9 @@
     "dev": "NODE_ENV=development STAGE_ENV=local next dev -p 3100",
     "build": "next build",
     "start": "next start -p 80",
-    "start:test": "NODE_ENV=development STAGE_ENV=test next start -p 8080",
-    "start:staging": "NODE_ENV=production STAGE_ENV=staging next start -p 8080",
-    "start:production": "NODE_ENV=production STAGE_ENV=production next start -p 8080",
+    "start:test": "NODE_ENV=development STAGE_ENV=test next start -p 80",
+    "start:staging": "NODE_ENV=production STAGE_ENV=staging next start -p 80",
+    "start:production": "NODE_ENV=production STAGE_ENV=production next start -p 80",
     "lint-watch": "esw pages --ext .js,.jsx --watch --color",
     "lint": "eslint pages",
     "lint:fix": "eslint pages --fix"
