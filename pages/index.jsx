@@ -20,6 +20,7 @@ const Home = (props) => {
   const { user } = state;
 
   const {
+    json,
     stars,
     API_URL,
     NODE_ENV,
@@ -27,6 +28,8 @@ const Home = (props) => {
     DB_HOST,
   } = props;
   const { isAuthenticated } = user;
+
+  console.log('json:', json);
 
   const loadData = async () => {
     const response = await client.get('/hello');
@@ -94,6 +97,7 @@ Home.getInitialProps = async (ctx) => {
   const json = await res.json();
   console.log('json:', json);
   return {
+    json: json,
     stars: json.stargazers_count,
     API_URL: process.env.API_URL,
     NODE_ENV: process.env.NODE_ENV,
@@ -103,6 +107,7 @@ Home.getInitialProps = async (ctx) => {
 };
 
 Home.defaultProps = {
+  json: null,
   stars: null,
   API_URL: null,
   NODE_ENV: null,
@@ -110,6 +115,7 @@ Home.defaultProps = {
   DB_HOST: null,
 };
 Home.propTypes = {
+  json: PropTypes.object,
   stars: PropTypes.number,
   API_URL: PropTypes.string,
   NODE_ENV: PropTypes.string,
