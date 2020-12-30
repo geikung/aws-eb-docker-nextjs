@@ -106,6 +106,7 @@ Home.defaultProps = {
   API_URL: null,
   NODE_ENV: null,
   STAGE_ENV: null,
+  DB_HOST: null,
 };
 Home.propTypes = {
   stars: PropTypes.number,

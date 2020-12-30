@@ -26,9 +26,6 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v1
 
-      # - name: Package install
-      #   run: sudo apt-get install -y pwgen
-
       - name: Set stage env
         run: echo '::set-output name=STAGE_ENV::test'
         id: stage-env
@@ -47,19 +44,16 @@ jobs:
       - name: Print Dockerfile
         run: cat Dockerfile
 
-      - name: TEST
-        run: echo ${{ steps.random-env.outputs.RANDOM_STR }}
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
 
-      # - name: Generate deployment package
-      #   run: zip -r deploy.zip . -x '*.git*'
-
-      # - name: Deploy to EB
-      #   uses: einaregilsson/beanstalk-deploy@v14
-      #   with:
-      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     application_name: HelloWorld
-      #     environment_name: Helloworld-env
-      #     version_label: "${{ github.run_id }}-${{ steps.generator.outputs.name }}"
-      #     region: us-east-2
-      #     deployment_package: deploy.zip
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v14
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: HelloWorld
+          environment_name: Helloworld-test
+          version_label: "helloworld-${{ github.run_id }}-${{ steps.random-env.outputs.RANDOM_STR }}"
+          region: us-east-2
+          deployment_package: deploy.zip

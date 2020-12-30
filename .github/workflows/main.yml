@@ -5,10 +5,10 @@ name: CI
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ test ]
   pull_request:
-    branches: [ main ]
+    branches: [ test ]
     types: [closed]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -26,11 +26,19 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v1
 
+      - name: Set stage env
+        run: echo '::set-output name=STAGE_ENV::production'
+        id: stage-env
+
+      - name: Set random env
+        run: echo '::set-output name=RANDOM_STR::$(openssl rand -base64 14)'
+        id: random-env
+
       - name: Replace stage env string in Dockerfile
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "pnpm run start"
-          replace: "pnpm run start:production"
+          replace: "pnpm run start:${{ steps.stage-env.outputs.STAGE_ENV }}"
           include: "Dockerfile"
 
       - name: Print Dockerfile
@@ -45,7 +53,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: HelloWorld
-          environment_name: Helloworld-env
-          version_label: "${{ github.run_id }}-${{ github.run_number }}"
+          environment_name: Helloworld-production
+          version_label: "helloworld-${{ github.run_id }}-${{ steps.random-env.outputs.RANDOM_STR }}"
           region: us-east-2
           deployment_package: deploy.zip
