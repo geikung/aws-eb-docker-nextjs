@@ -16,6 +16,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Eslint Action
+        uses: stefanoeb/eslint-action@1.0.2
+
   # This workflow contains a single job called "build"
   deploy:
     # The type of runner that the job will run on

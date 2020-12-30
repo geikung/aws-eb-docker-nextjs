@@ -29,6 +29,6 @@ async function handler(req, res) {
     executes,
   })(req, res);
   return executes[req.method](req, res);
-}
+};
 
 export default handler;
