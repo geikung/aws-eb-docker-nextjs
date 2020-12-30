@@ -43,9 +43,18 @@ jobs:
         if: ${{ failure() }}
         run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] eslint fail'"
 
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Run Jest
+        uses: stefanoeb/jest-action@1.0.3
+
   # This workflow contains a single job called "build"
   deploy:
-    needs: eslint
+    needs: [eslint, jest]
 
     # The type of runner that the job will run on
     runs-on: ubuntu-latest

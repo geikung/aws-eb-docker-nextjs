@@ -1,6 +1,13 @@
 {
   "presets": [
-    "next/babel"
+    "next/babel",
+    ["@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ]
   ],
   "plugins": [
     [
