@@ -23,10 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Nofify action
-        uses: snow-actions/line-notify@v1.0.0
+        uses: appleboy/line-action@master
         with:
-          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
-          message: "[${{ github.repository }}][${{ env.stage }}] start deploy...&stickerPackageId=3&stickerId=233"
+          token: ${{ secrets.LINE_ACCESS_TOKEN }}
+          args: "[${{ github.repository }}][${{ env.stage }}][${{ github.event_name }}] start deploy..."
+          stickers: "3::233"
 
   # eslint:
   #   runs-on: ubuntu-latest
@@ -39,16 +40,16 @@ jobs:
 
   #     - name: The job has succeeded
   #       if: ${{ success() }}
-  #       uses: snow-actions/line-notify@v1.0.0
+  #       uses: appleboy/line-action@master
   #       with:
-  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         token: ${{ secrets.LINE_ACCESS_TOKEN }}
   #         message: "[HelloWorld - test] eslint success"
 
   #     - name: The job has failed
   #       if: ${{ failure() }}
-  #       uses: snow-actions/line-notify@v1.0.0
+  #       uses: appleboy/line-action@master
   #       with:
-  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         token: ${{ secrets.LINE_ACCESS_TOKEN }}
   #         message: "[HelloWorld - test] eslint fail"
 
   # # This workflow contains a single job called "build"
@@ -93,9 +94,9 @@ jobs:
 
   #     - name: The job has failed
   #       if: ${{ failure() }}
-  #       uses: snow-actions/line-notify@v1.0.0
+  #       uses: appleboy/line-action@master
   #       with:
-  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         token: ${{ secrets.LINE_ACCESS_TOKEN }}
   #         message: "[HelloWorld - test] deploy fail"
 
   # notify_end:
@@ -104,7 +105,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Nofify action
-  #       uses: snow-actions/line-notify@v1.0.0
+  #       uses: appleboy/line-action@master
   #       with:
-  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         token: ${{ secrets.LINE_ACCESS_TOKEN }}
   #         message: "[HelloWorld - test] start deploy...&stickerPackageId=3&stickerId=220"
