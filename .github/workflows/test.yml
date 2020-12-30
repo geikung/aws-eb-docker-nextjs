@@ -26,14 +26,15 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v1
 
-      - name: Checkout source code
-        run: echo ::set-env name=STAGE_ENV::"test"
+      - name: Set stage env
+        run: echo '::set-output name=STAGE_ENV::test'
+        id: custom-env
 
       - name: Replace stage env string in Dockerfile
         uses: jacobtomlinson/gha-find-replace@master
         with:
           find: "pnpm run start"
-          replace: "pnpm run start:${STAGE_ENV}"
+          replace: "pnpm run start:${{ steps.custom-env.outputs.STAGE_ENV }}"
           include: "Dockerfile"
 
       - name: Print Dockerfile
