@@ -24,6 +24,7 @@ const Home = (props) => {
     API_URL,
     NODE_ENV,
     STAGE_ENV,
+    DB_HOST,
   } = props;
   const { isAuthenticated } = user;
 
@@ -73,6 +74,9 @@ const Home = (props) => {
       <div className="my-text">
         STAGE_ENV: {STAGE_ENV}
       </div>
+      <div className="my-text">
+        DB_HOST: {DB_HOST}
+      </div>
 
       <div>
         <Button onClick={handleLogin}>Login</Button>
@@ -93,6 +97,7 @@ Home.getInitialProps = async (ctx) => {
     API_URL: process.env.API_URL,
     NODE_ENV: process.env.NODE_ENV,
     STAGE_ENV: process.env.STAGE_ENV,
+    DB_HOST: process.env.DB_HOST,
   };
 };
 
@@ -107,6 +112,7 @@ Home.propTypes = {
   API_URL: PropTypes.string,
   NODE_ENV: PropTypes.string,
   STAGE_ENV: PropTypes.string,
+  DB_HOST: PropTypes.string,
 };
 
 export default Home;
