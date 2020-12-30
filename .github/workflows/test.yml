@@ -2,6 +2,9 @@
 
 name: CI
 
+env:
+  stage: 'test'
+
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -16,74 +19,92 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  notify:
+  notify_start:
     runs-on: ubuntu-latest
     steps:
       - name: Nofify action
         uses: snow-actions/line-notify@v1.0.0
         with:
           access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
-          message: "[HelloWorld - test] start deploy..."
+          message: "[${{ github.repository }}][${{ env.stage }}] start deploy...&stickerPackageId=3&stickerId=233"
 
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
+  # eslint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
 
-      - name: Eslint action
-        uses: stefanoeb/eslint-action@1.0.2
+  #     - name: Eslint action
+  #       uses: stefanoeb/eslint-action@1.0.2
 
-      - name: The job has succeeded
-        if: ${{ success() }}
-        uses: snow-actions/line-notify@v1.0.0
-        with:
-          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
-          message: "[HelloWorld - test] eslint success"
+  #     - name: The job has succeeded
+  #       if: ${{ success() }}
+  #       uses: snow-actions/line-notify@v1.0.0
+  #       with:
+  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         message: "[HelloWorld - test] eslint success"
 
-      - name: The job has failed
-        if: ${{ failure() }}
-        uses: snow-actions/line-notify@v1.0.0
-        with:
-          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
-          message: "[HelloWorld - test] eslint fail"
+  #     - name: The job has failed
+  #       if: ${{ failure() }}
+  #       uses: snow-actions/line-notify@v1.0.0
+  #       with:
+  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         message: "[HelloWorld - test] eslint fail"
 
-  # This workflow contains a single job called "build"
-  deploy:
-    needs: eslint
+  # # This workflow contains a single job called "build"
+  # deploy:
+  #   needs: eslint
 
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+  #   # The type of runner that the job will run on
+  #   runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v1
+  #   # Steps represent a sequence of tasks that will be executed as part of the job
+  #   steps:
+  #     - name: Checkout source code
+  #       uses: actions/checkout@v1
 
-      - name: Set stage env
-        run: echo '::set-output name=STAGE_ENV::test'
-        id: stage-env
+  #     - name: Set stage env
+  #       run: echo '::set-output name=STAGE_ENV::test'
+  #       id: stage-env
 
-      - name: Replace stage env string in Dockerfile
-        uses: jacobtomlinson/gha-find-replace@master
-        with:
-          find: "pnpm run start"
-          replace: "pnpm run start:${{ steps.stage-env.outputs.STAGE_ENV }}"
-          include: "Dockerfile"
+  #     - name: Replace stage env string in Dockerfile
+  #       uses: jacobtomlinson/gha-find-replace@master
+  #       with:
+  #         find: "pnpm run start"
+  #         replace: "pnpm run start:${{ steps.stage-env.outputs.STAGE_ENV }}"
+  #         include: "Dockerfile"
 
-      - name: Print Dockerfile
-        run: cat Dockerfile
+  #     - name: Print Dockerfile
+  #       run: cat Dockerfile
 
-      - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+  #     - name: Generate deployment package
+  #       run: zip -r deploy.zip . -x '*.git*'
 
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v14
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: HelloWorld
-          environment_name: Helloworld-test
-          version_label: "helloworld-${{ github.run_id }}-${{ github.run_number }}"
-          region: us-east-2
-          deployment_package: deploy.zip
+  #     - name: Deploy to EB
+  #       uses: einaregilsson/beanstalk-deploy@v14
+  #       with:
+  #         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         application_name: HelloWorld
+  #         environment_name: Helloworld-test
+  #         version_label: "helloworld-${{ github.run_id }}-${{ github.run_number }}"
+  #         region: us-east-2
+  #         deployment_package: deploy.zip
+
+  #     - name: The job has failed
+  #       if: ${{ failure() }}
+  #       uses: snow-actions/line-notify@v1.0.0
+  #       with:
+  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         message: "[HelloWorld - test] deploy fail"
+
+  # notify_end:
+  #   needs: deploy
+
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Nofify action
+  #       uses: snow-actions/line-notify@v1.0.0
+  #       with:
+  #         access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+  #         message: "[HelloWorld - test] start deploy...&stickerPackageId=3&stickerId=220"
