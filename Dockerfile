@@ -16,5 +16,5 @@ RUN pnpm install
 
 # start app
 RUN pnpm run build
-EXPOSE 80
+EXPOSE 8080
 CMD pnpm run start

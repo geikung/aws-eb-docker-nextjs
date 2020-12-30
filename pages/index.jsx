@@ -92,6 +92,7 @@ Home.getInitialProps = async (ctx) => {
   // server
   const res = await fetch('https://api.github.com/repos/vercel/next.js');
   const json = await res.json();
+  console.log('json:', json);
   return {
     stars: json.stargazers_count,
     API_URL: process.env.API_URL,
