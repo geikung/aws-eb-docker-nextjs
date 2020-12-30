@@ -39,7 +39,7 @@ jobs:
         if: ${{ failure() }}
         run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] eslint fail'"
 
-  jest:
+  unit_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -50,7 +50,7 @@ jobs:
 
       - name: The job has failed
         if: ${{ failure() }}
-        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] jest fail'"
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] unit_test fail'"
 
   # This workflow contains a single job called "build"
   deploy:
