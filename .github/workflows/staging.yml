@@ -2,22 +2,62 @@
 
 name: CI
 
+env:
+  stage: 'staging'
+  eb_application_name: 'HelloWorld'
+  eb_environment_name: 'Helloworld-staging'
+  notify_url: 'https://notify-api.line.me/api/notify'
+
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ staging ]
-  pull_request:
-    branches: [ staging ]
-    types: [closed]
+  # pull_request:
+  #   branches: [ staging ]
+  #   types: [closed]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  notify_start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Nofify action
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] start deploy...&stickerPackageId=3&stickerId=233'"
+
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Eslint action
+        uses: stefanoeb/eslint-action@1.0.2
+
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] eslint fail'"
+
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v1
+
+      - name: Run Jest
+        uses: stefanoeb/jest-action@1.0.3
+
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] unit_test fail'"
+
   # This workflow contains a single job called "build"
   deploy:
+    needs: [eslint, unit_test]
+
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -27,7 +67,7 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Set stage env
-        run: echo '::set-output name=STAGE_ENV::staging'
+        run: echo '::set-output name=STAGE_ENV::${{ env.stage }}'
         id: stage-env
 
       - name: Replace stage env string in Dockerfile
@@ -48,8 +88,20 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: HelloWorld
-          environment_name: Helloworld-staging
-          version_label: "helloworld-${{ github.run_id }}-${{ github.run_number }}"
+          application_name: ${{ env.eb_application_name }}
+          environment_name: ${{ env.eb_environment_name }}
+          version_label: "${{ env.eb_application_name }}-${{ env.eb_environment_name }}-${{ github.run_id }}-${{ github.run_number }}"
           region: us-east-2
           deployment_package: deploy.zip
+
+      - name: The job has failed
+        if: ${{ failure() }}
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] deploy success'"
+
+  notify_end:
+    needs: deploy
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Nofify action
+        run: "curl -X POST ${{ env.notify_url }} -H 'Authorization: Bearer ${{ secrets.LINE_ACCESS_TOKEN }}' -d message='[${{ github.repository }}][${{ env.stage }}] success deploy&stickerPackageId=3&stickerId=220'"
